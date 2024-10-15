@@ -4,8 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 #include <vector>
 #include <cmath>
+#include <stdio.h>
 
 class yhm_Matrix
 {
@@ -18,6 +20,9 @@ private:
 public:
     //构造函数
     yhm_Matrix(size_t rows, size_t cols);
+
+    // 初始化为单位矩阵的构造函数
+    yhm_Matrix(size_t rows, size_t cols, bool is_Identy_Matrix);
 
     // 重载构造函数
     yhm_Matrix();
@@ -54,6 +59,21 @@ public:
 
     // 求解当前矩阵的余子式矩阵
     yhm_Matrix getConfactor_Matrix();
+
+    // 矩阵加法
+    yhm_Matrix yhm_Add(yhm_Matrix b);
+
+    // 矩阵减法
+    yhm_Matrix yhm_Sub(yhm_Matrix b);
+
+    // 矩阵乘法
+    yhm_Matrix yhm_Mul(yhm_Matrix b);
+
+    // 矩阵的秩
+    int yhm_GetRank();
+
+    // 初等行变换
+    void yhm_RowTransform(size_t x, size_t y);
 };
 
 

@@ -13,6 +13,25 @@ yhm_Matrix::yhm_Matrix(size_t rows, size_t cols) : yrow(rows), ycol(cols), yMaxt
     }
 }
 
+/// @brief 初始化的矩阵必须为方阵，
+/// @param rows 初始化矩阵行数
+/// @param cols 初始化矩阵列数
+/// @param is_Identy_Matrix 是否初始化为单位阵(True, 是 | False, 否)
+yhm_Matrix::yhm_Matrix(size_t rows, size_t cols, bool is_Identy_Matrix)
+{
+    if(rows != cols)
+    {
+        throw std::invalid_argument("Non-square matrices cannot be initialized to the identity matrix!");
+    }
+    double uvalue = is_Identy_Matrix ? 1.0 : 0.0;
+
+    yrow = rows, ycol = cols;
+    yMaxtrix = std::vector<std::vector<double>>(rows, std::vector(cols, 0.0));
+
+    for(size_t i = 0; i<yrow; i++)
+        yMaxtrix[i][i] += uvalue;
+}
+
 /// @brief 重载构造函数，默认为两行两列的矩阵，内部数值为0.0
 yhm_Matrix::yhm_Matrix() : yrow(2), ycol(2), yMaxtrix(2, std::vector<double>(2, 0)){}
 
@@ -66,7 +85,7 @@ void yhm_Matrix::yhm_Print_Matrix()
     for(size_t i = 0; i<row; i++)
     {
         for(size_t j = 0; j<col; j++)
-            std::cout << Matrix[i][j] << ' ';
+            printf("%.3lf\t", yMaxtrix[i][j]);
         std::cout << std::endl;
     }
 }
@@ -195,7 +214,7 @@ yhm_Matrix yhm_Matrix::getInverse()
         throw std::runtime_error("This matrix is ​​a singular matrix and cannot be inverted!");
     }
 
-    // 求解余子式的转置矩阵
+    // 求解余子式的转置矩阵进而求得伴随矩阵
     auto res = this->getConfactor_Matrix().yhm_Transpose_Matrix();
     auto rec_det = 1.0/this->yhm_Cal_Det();
 
@@ -224,5 +243,136 @@ yhm_Matrix yhm_Matrix::getConfactor_Matrix()
             res.setElement(i, j, this->getAlgebraic_cofactor(i, j).yhm_Cal_Det());
 
     return res;
+}
+
+/// @brief 返回两矩阵相加后的矩阵
+/// @param b 作为右侧矩阵
+/// @return 返回一个同类型的矩阵
+yhm_Matrix yhm_Matrix::yhm_Add(yhm_Matrix b)
+{
+    auto &a = yMaxtrix;
+    if(yrow != b.getRow() || ycol != b.getCol())
+    {
+        throw std::runtime_error("The two matrices cannot be added, and the number of rows or columns is not the same!");
+    }
+
+    yhm_Matrix res(yrow, ycol);
+
+    for(size_t i = 0; i<yrow; i++)
+        for(size_t j = 0; j<ycol; j++)
+            res.setElement(i, j, a[i][j] + b.yMaxtrix[i][j]);
+
+    return res;
+}
+
+/// @brief 返回两矩阵相减的结果
+/// @param b 作为左侧矩阵
+/// @return 返回一个同类型的矩阵
+yhm_Matrix yhm_Matrix::yhm_Sub(yhm_Matrix b)
+{
+    auto &a = yMaxtrix;
+    if(yrow != b.getRow() || ycol != b.getCol())
+    {
+        throw std::runtime_error("The two matrices cannot be added, and the number of rows or columns is not the same!");
+    }
+
+    yhm_Matrix res(yrow, ycol);
+
+    for(size_t i = 0; i<yrow; i++)
+        for(size_t j = 0; j<ycol; j++)
+            res.setElement(i, j, a[i][j] - b.yMaxtrix[i][j]);
+
+    return res;
+}
+
+/// @brief 矩阵相乘，所传入的矩阵为右矩阵
+/// @param b 右矩阵
+/// @return 返回两矩阵相乘的结果
+yhm_Matrix yhm_Matrix::yhm_Mul(yhm_Matrix b)
+{
+    if(ycol != b.getRow())
+    {
+        throw std::runtime_error("Two matrices cannot be multiplied!");
+    }
+
+    auto a = yMaxtrix;
+    yhm_Matrix res(yrow, b.getCol());
+
+    for(size_t i = 0; i<yrow; i++)
+    {
+        for(size_t j = 0; j<b.getCol(); j++)
+        {
+            double sum = 0;
+            for(size_t k = 0; k<ycol; k++)
+                sum += a[i][k] * b.yMaxtrix[k][j];
+            res.setElement(i, j, sum);
+        }
+    }
+
+    return res;
+}
+
+int yhm_Matrix::yhm_GetRank()
+{
+    size_t row = yrow, col = ycol;
+    yhm_Matrix a(yrow, ycol);
+    a.yMaxtrix = yMaxtrix;
+    auto &Ma = a.yMaxtrix;
+
+    for(size_t i = 0; i<row - 1; i++)
+    {
+        if(Ma[i][i] == 0)
+        {
+            size_t cur = 0;
+            for(size_t j = i + 1; j<row; j++)
+                if(Ma[j][i] != 0)
+                {
+                    cur = j;
+                    break;
+                }
+            a.yhm_RowTransform(i, cur);
+        }
+        if(Ma[i][i] == 0)   continue;
+
+        double factor = Ma[i][i];
+        for(size_t j = i + 1; j<row; j++)
+        {
+            double div = Ma[j][i]/factor;
+            for(size_t k = i; k<col; k++)
+            {
+                Ma[j][k] -= Ma[i][k] * div;
+            }
+        }
+    }
+
+    int rank = 0;
+    for(const auto row : Ma)
+    {
+        for(const auto col : row)    
+        {
+            if(std::abs(col) > 1e-6)
+            {
+                rank++;
+                break;
+            }
+        }
+    }
+
+    a.yhm_Print_Matrix();
+
+    return rank;
+}
+
+void yhm_Matrix::yhm_RowTransform(size_t x, size_t y)
+{
+    if(x < 0 || x > yrow || y < 0 || y > yrow)
+    {
+        throw std::invalid_argument("The number of rows or columns exceeds the limit!");
+    }
+
+    if(x == y)  return;
+
+    for(size_t j = 0; j<ycol; j++)
+        std::swap(yMaxtrix[x][j], yMaxtrix[y][j]);
 }
 
