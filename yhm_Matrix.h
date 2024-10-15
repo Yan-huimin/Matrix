@@ -19,17 +19,22 @@ public:
     //构造函数
     yhm_Matrix(size_t rows, size_t cols);
 
+    // 重载构造函数
     yhm_Matrix();
 
     //析构函数
     ~yhm_Matrix();
 
+    // 为矩阵某一位置的元素赋值
     void setElement(size_t x, size_t y, double value);
 
+    // 获取矩阵某一位置的元素值
     double getElement(size_t x, size_t y) const;
 
+    // 获取矩阵当前的行数
     size_t getRow() const;
 
+    // 获取矩阵当前的列数
     size_t getCol() const;
 
     //输出当前的矩阵
@@ -43,6 +48,12 @@ public:
 
     // 返回以x列为中心点的代数余子式，返回类型为矩阵
     yhm_Matrix getAlgebraic_cofactor(size_t x, size_t y);
+
+    // 返回当前矩阵的逆矩阵
+    yhm_Matrix getInverse();
+
+    // 求解当前矩阵的余子式矩阵
+    yhm_Matrix getConfactor_Matrix();
 };
 
 

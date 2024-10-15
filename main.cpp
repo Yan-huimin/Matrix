@@ -35,13 +35,13 @@ int main()
             a.setElement(i, j, cur[i][j]);
     a.yhm_Print_Matrix();
 
-    std::cout << "Transport_Matrix" << std::endl;
-    std::cout << "********************************Debug*********************************" << std::endl;
-    auto b = a.yhm_Transpose_Matrix();
-    b.yhm_Print_Matrix();
-
     std::cout << "Det_Value" << std::endl;
     std::cout << "********************************Debug*********************************" << std::endl;
     auto value = a.yhm_Cal_Det();
     std::cout << value << std::endl;
+
+    std::cout << "Inverse_Matrix" << std::endl;
+    std::cout << "********************************Debug*********************************" << std::endl;
+    auto inv_ma = a.getInverse();
+    inv_ma.yhm_Print_Matrix();
 }

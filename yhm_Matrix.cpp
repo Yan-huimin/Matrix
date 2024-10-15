@@ -176,3 +176,53 @@ yhm_Matrix yhm_Matrix::getAlgebraic_cofactor(size_t x, size_t y)
     return res;
 }
 
+
+/// @brief 求解逆矩阵(使用的是代数余子式求解逆矩阵)
+/// @return 返回当前矩阵的逆矩阵
+yhm_Matrix yhm_Matrix::getInverse()
+{
+    // 在这里无需判定矩阵是否行数或者列数为0 因为矩阵无法初始化为0行0列的矩阵 这样的矩阵在这里是不被允许创建的
+    // 判定是否为方阵
+    if(ycol != yrow)
+    {
+        throw std::runtime_error("This matrix is ​​not a square matrix and cannot be inverted!");
+    }
+
+    // 判定是否为奇异矩阵
+    // 行列式为零，则当前的矩阵为奇异矩阵，无法进行求逆操作
+    if(this->yhm_Cal_Det() == 0)
+    {
+        throw std::runtime_error("This matrix is ​​a singular matrix and cannot be inverted!");
+    }
+
+    // 求解余子式的转置矩阵
+    auto res = this->getConfactor_Matrix().yhm_Transpose_Matrix();
+    auto rec_det = 1.0/this->yhm_Cal_Det();
+
+    // 在最后计算结果的时候再加上符号
+    for(size_t i = 0; i<yrow; i++)
+        for(size_t j = 0; j<ycol; j++)
+            res.setElement(i, j, pow(-1, i + j) * rec_det * res.getElement(i, j));
+
+    return res;
+}
+
+/// @brief 求解当前矩阵的余子式矩阵
+/// @return 返回当前矩阵的余子式矩阵
+yhm_Matrix yhm_Matrix::getConfactor_Matrix()
+{
+    // 只可对方阵进行余子式的求解
+    if(ycol != yrow)
+    {
+        throw std::invalid_argument("Unable to solve cofactors for non-square matrices!");
+    }
+
+    yhm_Matrix res(yrow, ycol);
+
+    for(size_t i = 0; i<yrow; i++)
+        for(size_t j = 0; j<ycol; j++)
+            res.setElement(i, j, this->getAlgebraic_cofactor(i, j).yhm_Cal_Det());
+
+    return res;
+}
+
