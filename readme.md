@@ -34,7 +34,7 @@ auto b = ~a;
 b即为a逆矩阵
 ````
 
-:two: <font color = yellow>**矩阵求转置**</font>
+**:two:** <font color = yellow>**矩阵求转置**</font>
 
 ```c++
 auto b = !a;
@@ -42,7 +42,7 @@ auto b = !a;
 b为a的转置矩阵
 ```
 
-:three: <font color = yellow>**矩阵加法**</font>
+**:three:** <font color = yellow>**矩阵加法**</font>
 
 ```c++
 auto c = a + b;
@@ -50,7 +50,7 @@ auto c = a + b;
 c为a与b矩阵相加的结果
 ```
 
-:four: <font color = yellow>**矩阵减法**</font>
+**:four:** <font color = yellow>**矩阵减法**</font>
 
 ```c++
 auto c = a - b
@@ -58,7 +58,7 @@ auto c = a - b
 c为a与b矩阵相减的结果
 ```
 
-:five: <font color = yellow>**矩阵乘法**</font>
+**:five:** <font color = yellow>**矩阵乘法**</font>
 
 ```c++
 auto c = a * b;
@@ -66,7 +66,7 @@ auto c = a * b;
 c为矩阵a与b相乘的运算结果
 ```
 
-:six: <font color = yellow>**矩阵打印**</font>
+**:six:** <font color = yellow>**矩阵打印**</font>
 
 ```c++
 a = yhm_Matrix(3, 3, true);
