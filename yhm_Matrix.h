@@ -8,15 +8,18 @@
 #include <vector>
 #include <cmath>
 #include <stdio.h>
+#include <iomanip>
+#include <regex>
 
 class yhm_Matrix
 {
+protected:
+    std::vector<std::vector<double>> yMaxtrix;
 private:
     //行数与列数
     size_t yrow;
     size_t ycol;
     //存储矩阵数值
-    std::vector<std::vector<double>> yMaxtrix;
 public:
     //构造函数
     yhm_Matrix(size_t rows, size_t cols);
@@ -74,6 +77,31 @@ public:
 
     // 初等行变换
     void yhm_RowTransform(size_t x, size_t y);
+
+    // 乘号运算符重载
+    yhm_Matrix operator * (const yhm_Matrix& other);
+
+    // 加号运算符重载
+    yhm_Matrix operator + (const yhm_Matrix& other);
+
+    // 减号号运算符重载
+    yhm_Matrix operator - (const yhm_Matrix& other);
+
+    // ~运算符重载
+    yhm_Matrix operator ~ ();
+
+    yhm_Matrix operator ! ();
+
+    friend std::ostream& operator<<(std::ostream& os, const yhm_Matrix& mat) 
+    {
+        for (const auto& row : mat.yMaxtrix) {
+            for (double value : row) {
+                os << value << " ";
+            }
+            os << std::endl;
+        }
+        return os;
+    }
 };
 
 

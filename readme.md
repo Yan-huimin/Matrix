@@ -18,3 +18,67 @@
 - :traffic_light: <font color = pink>*矩阵的加减乘基础运算*</font>
 - :traffic_light: <font color = blackred>*矩阵的初等行变换*</font>
 
+------
+
+:triangular_ruler: <font color = red>**How To Use ? **</font>
+
+**:one:** <font color = yellow>**矩阵求逆**</font>
+
+````c++
+yhm_Matrix a(3, 3);
+```
+    your code to give a  a value
+```
+auto b = ~a;
+
+b即为a逆矩阵
+````
+
+:two: <font color = yellow>**矩阵求转置**</font>
+
+```c++
+auto b = !a;
+
+b为a的转置矩阵
+```
+
+:three: <font color = yellow>**矩阵加法**</font>
+
+```c++
+auto c = a + b;
+
+c为a与b矩阵相加的结果
+```
+
+:four: <font color = yellow>**矩阵减法**</font>
+
+```c++
+auto c = a - b
+
+c为a与b矩阵相减的结果
+```
+
+:five: <font color = yellow>**矩阵乘法**</font>
+
+```c++
+auto c = a * b;
+
+c为矩阵a与b相乘的运算结果
+```
+
+:six: <font color = yellow>**矩阵打印**</font>
+
+```c++
+a = yhm_Matrix(3, 3, true);
+
+std::cout << a << std::endl;
+```
+
+
+
+
+
+
+
+
+

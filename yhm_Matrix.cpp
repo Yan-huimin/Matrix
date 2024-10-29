@@ -376,3 +376,38 @@ void yhm_Matrix::yhm_RowTransform(size_t x, size_t y)
         std::swap(yMaxtrix[x][j], yMaxtrix[y][j]);
 }
 
+/// @brief 乘号运算符重载
+/// @param other 右侧矩阵
+/// @return 
+yhm_Matrix yhm_Matrix::operator*(const yhm_Matrix& other)
+{
+    return this->yhm_Mul(other);
+}
+
+/// @brief 加号运算符重载
+/// @param other 
+/// @return 
+yhm_Matrix yhm_Matrix::operator+(const yhm_Matrix& other)
+{
+    return this->yhm_Add(other);
+}
+
+/// @brief 减号运算符重载
+/// @param other 
+/// @return 
+yhm_Matrix yhm_Matrix::operator-(const yhm_Matrix& other)
+{
+    return this->yhm_Sub(other);
+}
+
+/// @brief 求解矩阵的逆矩阵
+/// @return 
+yhm_Matrix yhm_Matrix::operator~()
+{
+    return this->getInverse();
+}
+
+yhm_Matrix yhm_Matrix::operator!()
+{
+    return this->yhm_Transpose_Matrix();
+}
