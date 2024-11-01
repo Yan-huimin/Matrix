@@ -30,6 +30,13 @@ public:
     // 重载构造函数
     yhm_Matrix();
 
+    /// @brief 使用vector容器对矩阵进行初始化，当vector容器元素小于
+    //         当前矩阵元素时，空余位置将为0，当vector容器元素数量大
+    //         于当前容器时，将会直接跳出
+    yhm_Matrix(size_t row, size_t col, std::vector<double> value);
+
+    yhm_Matrix(std::string File);
+
     //析构函数
     ~yhm_Matrix();
 

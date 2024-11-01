@@ -35,6 +35,80 @@ yhm_Matrix::yhm_Matrix(size_t rows, size_t cols, bool is_Identy_Matrix)
 /// @brief 重载构造函数，默认为两行两列的矩阵，内部数值为0.0
 yhm_Matrix::yhm_Matrix() : yrow(2), ycol(2), yMaxtrix(2, std::vector<double>(2, 0)){}
 
+/// @brief 使用vector容器对矩阵进行初始化
+/// @param row 矩阵行数
+/// @param col 矩阵列数
+/// @param value vector容器
+yhm_Matrix::yhm_Matrix(size_t row, size_t col, std::vector<double> value)
+{
+    this->yrow = row;   this->ycol = col;
+
+    if(value.size() <= 0)   return;
+
+    int count = 0, value_size = value.size();
+    for(size_t i = 0; i<row; i++)
+    {
+        std::vector<double> cur; 
+        for(size_t j = 0; j<col; j++)
+        {
+            cur.push_back(count >= value_size ? 0 : value[count]);
+            count++;
+        }
+        this->yMaxtrix.push_back(cur);
+    }
+}
+/*
++++++++++当当前传入的value容器为[1, 20], 但是矩阵行数列数分别为：row = 3, col = 3 时，矩阵
+将会初始化为：
+1 2 3
+4 5 6
+7 8 9
+剩下的将不会被存储到矩阵中。
+当当前传入的容器为：[1,6],矩阵的行数列数分别为：row = 3, col = 3;那么矩阵将被初始化为：
+1 2 3
+4 5 6
+0 0 0
+将会在不足的地方全都补全0
+*/
+
+/// @brief 从指定文件路径中读取矩阵
+/// @param File 文件路径，绝对路径
+yhm_Matrix::yhm_Matrix(std::string File)
+{
+    std::ifstream file(File);
+    std::string line;
+
+    size_t row = 0, col = 0;
+
+    std::regex rule(R"([-+]?\d*\.\d+|[-+]?\d+)");
+
+    if(file.is_open())
+    {
+        while(std::getline(file, line))
+        {
+            std::vector<double> cur;
+            std::sregex_iterator it(line.begin(), line.end(), rule);
+            std::sregex_iterator end;
+
+            while(it != end)
+            {
+                cur.push_back(std::stod(it -> str()));
+                it++;
+            }
+            this->yMaxtrix.push_back(cur);
+            row++;
+        }
+    }
+    else
+        throw std::runtime_error("File reading exception......");
+
+    col = this->yMaxtrix[0].size();
+
+    this->yrow = row;
+    this->ycol = col;
+}
+
+
 /// @brief 析构函数,vector将会自动管理内存，在这里无需进行操作
 yhm_Matrix::~yhm_Matrix(){}
 
